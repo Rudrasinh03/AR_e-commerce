@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>RUDRA STORE AR Discount Card</title>
+
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  margin:0;
+  height:100%;
+  overflow:hidden;
+  font-family:'Poppins',sans-serif;
+  background:transparent;
+}
+
+/* Status bar */
+#status{
+  position:fixed;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  color:white;
+  background:rgba(0,0,0,0.6);
+  padding:6px 14px;
+  border-radius:15px;
+  font-size:14px;
+  z-index:3000;
+}
+
+/* Motion card overlay */
+#motionCard{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#fff7e8,#e9dcc3);
+  overflow:hidden;
+  z-index:3000; 
+  pointer-events:auto;
+  padding:10px;
+  box-sizing:border-box;
+}
+
+/* Floating logo */
+.logo{
+  position:absolute;
+  top:10%;
+  font-weight:600;
+  letter-spacing:2px;
+  font-size:6vw;
+  color:#b8860b;
+  animation:floatLogo 4s ease-in-out infinite;
+}
+@keyframes floatLogo{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* Aura */
+.aura{
+  position:absolute;
+  width:50vw;
+  max-width:500px;
+  height:50vw;
+  max-height:500px;
+  background:radial-gradient(circle,rgba(212,175,55,.3),transparent 70%);
+  border-radius:50%;
+  animation:pulse 6s infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:.6}
+  50%{transform:scale(1.2);opacity:1}
+}
+
+/* Card */
+.card{
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.9);
+  border-radius:25px;
+  padding:5vw;
+  width:90%;
+  max-width:380px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  border:1px solid rgba(212,175,55,.4);
+  transform-style:preserve-3d;
+  transition:transform .1s ease;
+  animation:enter 1.5s ease forwards;
+  opacity:1;
+  pointer-events:auto;
+  z-index:3001;
+}
+
+/* Card text */
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:7vw;
+  max-font-size:34px;
+  background:linear-gradient(270deg,#b8860b,#ffd27f,#a67c00);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glowPulse 2.5s infinite;
+  margin-bottom:3vw;
+}
+@keyframes glowPulse{
+  0%,100%{text-shadow:0 0 10px #ffd27f}
+  50%{text-shadow:0 0 25px #d4af37}
+}
+
+.message{
+  font-size:4vw;
+  color:#4b3b22;
+  line-height:1.6;
+  margin-bottom:5vw;
+}
+
+/* Button */
+.btn{
+  display:inline-block;
+  background:linear-gradient(135deg,#d4af37,#8b6b00);
+  color:#fff;
+  padding:3vw 5vw;
+  border-radius:50px;
+  border:none;
+  cursor:pointer;
+  font-size:4vw;
+  font-weight:600;
+  animation:btnPulse 2s infinite;
+  z-index:3002;
+  margin-bottom:3vw;
+}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 0 10px rgba(212,175,55,.5)}
+  50%{box-shadow:0 0 25px rgba(212,175,55,1)}
+}
+
+/* Discount popup */
+#discountPopup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:90%;
+  max-width:400px;
+  background:#fffbe6;
+  border:2px solid #d4af37;
+  border-radius:20px;
+  padding:5vw;
+  text-align:center;
+  display:none;
+  z-index:4000;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+  animation:popupAnim 0.5s ease-out forwards;
+  box-sizing:border-box;
+}
+
+#discountPopup h2{
+  font-size:6vw;
+  margin-bottom:3vw;
+  color:#b8860b;
+}
+
+#discountPopup p{
+  font-size:4vw;
+  color:#4b3b22;
+  margin-bottom:3vw;
+}
+
+/* Buttons inside popup */
+.popup-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:3vw;
+  margin-bottom:3vw;
+}
+
+.popup-buttons button{
+  flex:1 1 40%;
+  min-width:100px;
+  padding:3vw 0;
+  border:none;
+  border-radius:50px;
+  font-size:4vw;
+  font-weight:600;
+  cursor:pointer;
+}
+
+#closePopup{
+  background:#b8860b;
+  color:#fff;
+}
+
+#reviewBtn{
+  background:#8b6b00;
+  color:#fff;
+}
+
+#continueShopBtn{
+  background:#d4af37;
+  color:#fff;
+}
+
+/* Animations */
+@keyframes popupAnim{
+  0%{transform:translate(-50%,-50%) scale(0.5);opacity:0}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div id="status">📷 Point camera at your AR card</div>
+
+<div id="motionCard">
+  <div class="aura"></div>
+  <div class="logo">RUDRA STORE</div>
+
+  <div class="card" id="parallaxCard">
+    <h1>Thank You</h1>
+    <div class="message">
+      Dear Valued Customer,<br>
+      Thank you for choosing <b>RUDRA STORE</b>.<br>
+      Your support means everything to us.<br>
+      With love & gratitude ✨
+    </div>
+    <button class="btn" id="discountBtn">🎁 Tap for Discount</button>
+  </div>
+</div>
+
+<audio id="sound" src="assets/sound/coin-win.mp3"></audio>
+<a-scene
+mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
+mindar-image-ui="enabled:true"
+renderer="alpha:true"
+embedded
+vr-mode-ui="enabled:false">
+  <a-camera look-controls="enabled:false"></a-camera>
+  <a-entity mindar-image-target="targetIndex:0"></a-entity>
+</a-scene>
+<script src="index.js"></script>
+</body>
+</html>
