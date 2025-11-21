@@ -36,61 +36,66 @@ document.addEventListener("mousemove", e => {
 
 // Show discount popup
 discountBtn.addEventListener("click", () => {
-  // Calculate expiry timestamp
   const now = new Date().getTime();
-  const expiryTime = now + randomHours * 60 * 60 * 1000; // in ms
+  const expiryTime = now + randomHours * 60 * 60 * 1000;
   localStorage.setItem(STORAGE_KEY, expiryTime);
 
-  // Create popup element
+  // Create popup
   const discountPopup = document.createElement("div");
   discountPopup.style.position = "fixed";
   discountPopup.style.top = "50%";
   discountPopup.style.left = "50%";
   discountPopup.style.transform = "translate(-50%,-50%)";
+  discountPopup.style.width = "90%";
+  discountPopup.style.maxWidth = "400px";
   discountPopup.style.background = "#fffbe6";
   discountPopup.style.border = "2px solid #d4af37";
   discountPopup.style.borderRadius = "20px";
-  discountPopup.style.padding = "30px";
+  discountPopup.style.padding = "20px";
   discountPopup.style.textAlign = "center";
   discountPopup.style.zIndex = "4000";
   discountPopup.style.boxShadow = "0 20px 50px rgba(0,0,0,.3)";
   discountPopup.style.animation = "popupAnim 0.5s ease-out forwards";
 
   discountPopup.innerHTML = `
-    <h2>🎉 Discount Unlocked!</h2>
-    <p>Use Code: <b>${DISCOUNT_CODE}</b> & Get <b>${DISCOUNT_PERCENT}% OFF</b>!</p>
-    <p id="timeLimit" style="font-size:18px;color:#4b3b22;margin-bottom:20px;">Time left: calculating...</p>
-    <div style="margin-top:10px;">
+    <h2 style="font-size:24px;margin-bottom:10px;">🎉 Discount Unlocked!</h2>
+    <p style="font-size:18px;margin-bottom:15px;">Use Code: <b>${DISCOUNT_CODE}</b> & Get <b>${DISCOUNT_PERCENT}% OFF</b>!</p>
+    <p id="timeLimit" style="font-size:16px;color:#4b3b22;margin-bottom:20px;">Time left: calculating...</p>
+    
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:15px;">
       <button id="reviewBtn" style="
-        padding:10px 20px;
-        margin-right:10px;
+        flex:1 1 40%;
+        padding:10px 0;
         border:none;
         border-radius:50px;
         background:#8b6b00;
         color:#fff;
         cursor:pointer;
         font-weight:600;
+        font-size:14px;
       ">Leave Review</button>
       <button id="continueShopBtn" style="
-        padding:10px 20px;
-        margin-left:10px;
+        flex:1 1 40%;
+        padding:10px 0;
         border:none;
         border-radius:50px;
         background:#d4af37;
         color:#fff;
         cursor:pointer;
         font-weight:600;
+        font-size:14px;
       ">Continue Shopping</button>
     </div>
+
     <button id="closePopup" style="
-      margin-top:15px;
-      padding:10px 25px;
+      padding:10px 20px;
       border:none;
       border-radius:50px;
       background:#b8860b;
       color:#fff;
       cursor:pointer;
       font-weight:600;
+      font-size:14px;
     ">Cancel</button>
   `;
 
@@ -113,26 +118,24 @@ discountBtn.addEventListener("click", () => {
     }
   }, 1000);
 
-  // Close popup
+  // Button actions
   discountPopup.querySelector("#closePopup").addEventListener("click", () => {
     discountPopup.remove();
     clearInterval(countdown);
   });
 
-  // Review button
   discountPopup.querySelector("#reviewBtn").addEventListener("click", () => {
     window.open("https://example.com/review", "_blank");
   });
 
-  // Continue Shopping button
   discountPopup.querySelector("#continueShopBtn").addEventListener("click", () => {
     window.location.href = `https://example.com/shop?discount=${DISCOUNT_CODE}`;
   });
 
-  discountBtn.style.display = "none"; // hide discount button after tap
+  discountBtn.style.display = "none"; // hide discount button after first tap
 });
 
-// Parallax popup animation keyframes
+// Mobile-friendly popup animation
 const styleSheet = document.createElement("style");
 styleSheet.textContent = `
 @keyframes popupAnim{
